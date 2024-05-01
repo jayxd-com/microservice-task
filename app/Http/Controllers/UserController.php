@@ -28,7 +28,7 @@ class UserController extends Controller implements HasMiddleware
     public function index()
     {
         $users = User::all();
-        return $users;
+        return response()->json($users);
     }
 
     /**
@@ -60,8 +60,11 @@ class UserController extends Controller implements HasMiddleware
     public function show(string $id)
     {
         // Find the user by ID
-        $user = $this->get_user($id);
-        return $user;
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        return response()->json($user);
     }
 
     /**
@@ -70,7 +73,10 @@ class UserController extends Controller implements HasMiddleware
     public function update(UpdateUserRequest $request, string $id)
     {
         // Find the user by ID
-        $user = $this->get_user($id);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
         // Update only the fields present in the request
         $user->update($request->all());
@@ -85,23 +91,15 @@ class UserController extends Controller implements HasMiddleware
     public function destroy(string $id)
     {
         // Find the user by ID
-        $user = $this->get_user($id);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
         // Delete the user
         $user->delete();
 
         // Optionally, you can return a response indicating success
         return response()->json(['message' => 'User deleted successfully']);
-    }
-
-
-    protected function get_user($id)
-    {
-        // Find the user by ID
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        return $user;
     }
 }

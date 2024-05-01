@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -40,6 +41,7 @@ class UserAdminTest extends TestCase
         $response->assertStatus(201);
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
     }
+
 
     public function testAdminCanUpdateUser()
     {

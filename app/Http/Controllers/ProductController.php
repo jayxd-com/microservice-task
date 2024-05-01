@@ -39,9 +39,8 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function store(ProductStoreRequest $request)
     {
-        // Create a new user instance
+        // Create a new product instance
         $product = new Product();
-
         // Fill the user instance with validated data
         $product->fill([
             'sku' => 'pr_' . Str::uuid(),
@@ -63,8 +62,12 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function show(string $id)
     {
-        // Find the user by ID
-        $product = $this->get_product($id);
+        // Find the product by ID
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
         return response()->json($product);
     }
 
@@ -73,8 +76,11 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function update(ProductUpdateRequest $request, string $id)
     {
-        // Find the user by ID
-        $product = $this->get_product($id);
+        // Find the product by ID
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
 
         // Update only the fields present in the request
         $product->update($request->all());
@@ -88,24 +94,17 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function destroy(string $id)
     {
-        // Find the user by ID
-        $product = $this->get_product($id);
+        // Find the product by ID
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
 
-        // Delete the user
+        // Delete the product
         $product->delete();
 
         // Optionally, you can return a response indicating success
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-
-    protected function get_product($id)
-    {
-        // Find the user by ID
-        $product = Product::find($id);
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
-        return $product;
-    }
 }
