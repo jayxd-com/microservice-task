@@ -14,6 +14,9 @@ Route::post('/register', [AuthController::class, 'register']);
 // Login Endpoint
 Route::post('/login', [AuthController::class, 'login']);
 
+// Logout Endpoint
+Route::post('/logout', [AuthController::class, 'logout']);
+
 // Verify Auth Endpoint
 Route::middleware('auth:api')->group(function () {
 

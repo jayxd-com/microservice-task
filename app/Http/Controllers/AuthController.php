@@ -47,4 +47,22 @@ class AuthController extends Controller
 
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+    /**
+     * Logout the authenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $user = auth('api')->user();
+
+        if ($user) {
+            $user->tokens()->delete();
+            return response()->json(['message' => 'User logged out successfully'], 200);
+        } else {
+            return response()->json(['message' => 'No authenticated user found'], 401);
+        }
+    }
 }
